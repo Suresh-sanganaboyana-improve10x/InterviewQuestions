@@ -1,7 +1,6 @@
 package com.example.interviewquestion.baseapi;
 
 import com.example.interviewquestion.Constants;
-import com.example.interviewquestion.MultipleChoice;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

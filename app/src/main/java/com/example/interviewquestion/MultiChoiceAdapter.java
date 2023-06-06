@@ -12,10 +12,16 @@ import java.util.List;
 
 public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHolder> {
 
-    public List<MultipleChoice> choices;
-    void setData(List<MultipleChoice> choices) {
+    private List<Question> choices;
+
+    private OnItemActionListener onItemActionListener;
+    void setData(List<Question> choices) {
         this.choices = choices;
         notifyDataSetChanged();
+    }
+
+    void setOnItemActionListener(OnItemActionListener onItemActionListener) {
+        this.onItemActionListener = onItemActionListener;
     }
     @NonNull
     @Override
@@ -27,8 +33,11 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MultiChoiceViewHolder holder, int position) {
-        MultipleChoice multipleChoice = choices.get(position);
+        Question question = choices.get(position);
         holder.binding.numberOfQuestionsTxt.setText(String.valueOf(position+1));
+        holder.binding.getRoot().setOnClickListener(v -> {
+            onItemActionListener.onNumberClick(question);
+        });
     }
 
     @Override

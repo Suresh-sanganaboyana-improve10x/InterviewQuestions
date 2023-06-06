@@ -27,19 +27,19 @@ public class ExampleUnitTest {
     @Test
     public void testMultipleChoice() throws IOException {
         MultiChoiceService multiChoiceService = new MultiChoiceApi().createMultiChoiceService();
-        Call<List<MultipleChoice>> call = multiChoiceService.getQuestionAndAnswers();
-        List<MultipleChoice>  multipleChoice= call.execute().body();
-        assertNotNull(multipleChoice);
-        assertFalse(multipleChoice.isEmpty());
-        System.out.println(new Gson().toJson(multipleChoice));
+        Call<List<Question>> call = multiChoiceService.getQuestionAndAnswers();
+        List<Question> question = call.execute().body();
+        assertNotNull(question);
+        assertFalse(question.isEmpty());
+        System.out.println(new Gson().toJson(question));
     }
 
     @Test
     public void testQuestion() throws IOException {
         MultiChoiceService multipleChoiceService = new MultiChoiceApi().createMultiChoiceService();
-        Call<MultipleChoice> call = multipleChoiceService.getQuestions(1);
-        MultipleChoice multipleChoice = call.execute().body();
+        Call<Question> call = multipleChoiceService.getQuestions(1);
+        Question question = call.execute().body();
 //        assertNotNull(multipleChoice);
-        System.out.println(new Gson().toJson(multipleChoice));
+        System.out.println(new Gson().toJson(question));
     }
 }
