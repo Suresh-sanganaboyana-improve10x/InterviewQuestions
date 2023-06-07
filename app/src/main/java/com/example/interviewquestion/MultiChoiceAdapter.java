@@ -1,8 +1,10 @@
 package com.example.interviewquestion;
 
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +17,7 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
     private List<Question> choices;
 
     private OnItemActionListener onItemActionListener;
+
     void setData(List<Question> choices) {
         this.choices = choices;
         notifyDataSetChanged();
