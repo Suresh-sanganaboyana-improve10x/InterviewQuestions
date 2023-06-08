@@ -18,6 +18,8 @@
             android:background="#03C5C5"
             android:padding="8dp"
             android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

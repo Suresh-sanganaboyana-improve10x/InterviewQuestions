@@ -18,13 +18,12 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
 
     private OnItemActionListener onItemActionListener;
 
-    private int currentQuestionPosition = 0;
-    
+    int currentQuestionPosition = 0;
+
     void setData(List<Question> choices) {
         this.choices = choices;
         notifyDataSetChanged();
     }
-
 
     void setOnItemActionListener(OnItemActionListener onItemActionListener) {
         this.onItemActionListener = onItemActionListener;
@@ -47,7 +46,7 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
             onItemActionListener.onNumberClick(question);
         });
         if (currentQuestionPosition == position) {
-            holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#DD0202"));
+            holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#FFFFFF"));
         } else {
             holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#000000"));
         }

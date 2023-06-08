@@ -22,7 +22,7 @@ public class MultipleChoiceActivity extends BaseActivity {
     public List<Question> questions = new ArrayList<>();
     public ActivityMultipleChoiceBinding binding;
     public MultiChoiceAdapter multiChoiceAdapter;
-    private int currentQuestionNum = 1;
+    private int currentQuestionNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +34,32 @@ public class MultipleChoiceActivity extends BaseActivity {
         setupMultiChoiceAdapter();
         setupMultipleChoiceRv();
         setNextBtn();
+        setPreviousBtn();
     }
 
     private void setNextBtn() {
         binding.nextBtn.setOnClickListener(v -> {
             try {
+                currentQuestionNum = multiChoiceAdapter.currentQuestionPosition;
                 currentQuestionNum++;
-                Question question = questions.get(currentQuestionNum-1);
+                Question question = questions.get(currentQuestionNum);
                 showQuestion(question);
             } catch (Exception exception) {
                 showToast("Questions over");
             }
+            multiChoiceAdapter.currentQuestionPosition = currentQuestionNum;
+            multiChoiceAdapter.notifyDataSetChanged();
         });
     }
 
     private void setPreviousBtn() {
-
+        binding.previousBtn.setOnClickListener(v -> {
+            currentQuestionNum--;
+            Question question = questions.get(currentQuestionNum);
+            showQuestion(question);
+            multiChoiceAdapter.currentQuestionPosition = currentQuestionNum;
+            multiChoiceAdapter.notifyDataSetChanged();
+        });
     }
 
     public void showQuestion(Question question) {
