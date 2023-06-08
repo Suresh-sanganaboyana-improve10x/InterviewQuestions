@@ -35,6 +35,17 @@ public class MultipleChoiceActivity extends BaseActivity {
         setupMultipleChoiceRv();
         setNextBtn();
         setPreviousBtn();
+
+    }
+
+    public void nextBtnHide() {
+        if (currentQuestionNum == questions.size()-1) {
+            binding.nextBtn.setVisibility(View.GONE);
+            binding.submitBtn.setVisibility(View.VISIBLE);
+        } else {
+            binding.nextBtn.setVisibility(View.VISIBLE);
+            binding.submitBtn.setVisibility(View.GONE);
+        }
     }
 
     private void setNextBtn() {
@@ -49,21 +60,26 @@ public class MultipleChoiceActivity extends BaseActivity {
             }
             multiChoiceAdapter.currentQuestionPosition = currentQuestionNum;
             multiChoiceAdapter.notifyDataSetChanged();
+            nextBtnHide();
         });
     }
 
     private void setPreviousBtn() {
         binding.previousBtn.setOnClickListener(v -> {
-            currentQuestionNum--;
-            Question question = questions.get(currentQuestionNum);
-            showQuestion(question);
+            try {
+                currentQuestionNum = multiChoiceAdapter.currentQuestionPosition;
+                currentQuestionNum--;
+                Question question = questions.get(currentQuestionNum);
+                showQuestion(question);
+            } catch (ArrayIndexOutOfBoundsException exception) {
+                showToast("This is the first question");
+            }
             multiChoiceAdapter.currentQuestionPosition = currentQuestionNum;
             multiChoiceAdapter.notifyDataSetChanged();
         });
     }
 
     public void showQuestion(Question question) {
-
         binding.questionTxt.setText(question.getQuestion());
         if (question.getAnswers().getAnswerA() == null) {
             binding.answerARb.setVisibility(View.GONE);
@@ -102,7 +118,6 @@ public class MultipleChoiceActivity extends BaseActivity {
             binding.answerFfRb.setText(question.getAnswers().getAnswerF());
         }
     }
-
 
     public void fetchQuestionAndAnswers() {
         Call<List<Question>> call = multiChoiceService.getQuestionAndAnswers();
