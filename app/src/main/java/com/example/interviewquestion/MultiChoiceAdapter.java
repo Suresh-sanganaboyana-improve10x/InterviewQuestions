@@ -1,10 +1,10 @@
 package com.example.interviewquestion;
 
-import android.content.res.ColorStateList;
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,10 +18,13 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
 
     private OnItemActionListener onItemActionListener;
 
+    private int currentQuestionPosition = 0;
+    
     void setData(List<Question> choices) {
         this.choices = choices;
         notifyDataSetChanged();
     }
+
 
     void setOnItemActionListener(OnItemActionListener onItemActionListener) {
         this.onItemActionListener = onItemActionListener;
@@ -35,12 +38,19 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MultiChoiceViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MultiChoiceViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Question question = choices.get(position);
         holder.binding.numberOfQuestionsTxt.setText(String.valueOf(position+1));
         holder.binding.getRoot().setOnClickListener(v -> {
+            currentQuestionPosition = position;
+            notifyDataSetChanged();
             onItemActionListener.onNumberClick(question);
         });
+        if (currentQuestionPosition == position) {
+            holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#DD0202"));
+        } else {
+            holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#000000"));
+        }
     }
 
     @Override

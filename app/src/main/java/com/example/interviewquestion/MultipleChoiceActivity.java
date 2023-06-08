@@ -29,6 +29,7 @@ public class MultipleChoiceActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMultipleChoiceBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getSupportActionBar().setTitle("QuestionsActivity");
         fetchQuestionAndAnswers();
         setupMultiChoiceAdapter();
         setupMultipleChoiceRv();
@@ -42,12 +43,17 @@ public class MultipleChoiceActivity extends BaseActivity {
                 Question question = questions.get(currentQuestionNum-1);
                 showQuestion(question);
             } catch (Exception exception) {
-                Toast.makeText(this, "Questions over", Toast.LENGTH_SHORT).show();
+                showToast("Questions over");
             }
         });
     }
 
+    private void setPreviousBtn() {
+
+    }
+
     public void showQuestion(Question question) {
+
         binding.questionTxt.setText(question.getQuestion());
         if (question.getAnswers().getAnswerA() == null) {
             binding.answerARb.setVisibility(View.GONE);
@@ -95,11 +101,12 @@ public class MultipleChoiceActivity extends BaseActivity {
             public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
                 questions = response.body();
                 multiChoiceAdapter.setData(questions);
+                showQuestion(questions.get(0));
             }
 
             @Override
             public void onFailure(Call<List<Question>> call, Throwable t) {
-
+                showToast("Failed to get data");
             }
         });
     }
