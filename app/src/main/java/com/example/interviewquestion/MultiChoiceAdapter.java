@@ -41,12 +41,12 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
         Question question = choices.get(position);
         holder.binding.numberOfQuestionsTxt.setText(String.valueOf(position+1));
         holder.binding.getRoot().setOnClickListener(v -> {
-            currentQuestionPosition = position;
-            notifyDataSetChanged();
+//            currentQuestionPosition = position;
+//            notifyDataSetChanged();
             onItemActionListener.onNumberClick(question);
         });
         if (currentQuestionPosition == position) {
-            holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#FD052A"));
         } else {
             holder.binding.numberOfQuestionsTxt.setTextColor(Color.parseColor("#000000"));
         }

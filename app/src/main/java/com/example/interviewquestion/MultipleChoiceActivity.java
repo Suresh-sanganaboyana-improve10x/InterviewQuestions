@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.interviewquestion.baseapi.BaseActivity;
 import com.example.interviewquestion.databinding.ActivityMultipleChoiceBinding;
@@ -22,7 +21,7 @@ public class MultipleChoiceActivity extends BaseActivity {
     public List<Question> questions = new ArrayList<>();
     public ActivityMultipleChoiceBinding binding;
     public MultiChoiceAdapter multiChoiceAdapter;
-    private int currentQuestionNum = 0;
+    private int currentQuestionPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,44 +37,59 @@ public class MultipleChoiceActivity extends BaseActivity {
 
     }
 
-    public void nextBtnHide() {
-        if (currentQuestionNum == questions.size()-1) {
-            binding.nextBtn.setVisibility(View.GONE);
+    public void showData(Question question) {
+        showQuestion(question);
+        setColor();
+        previousBtnVisibility();
+        nextBtnVisibility();
+
+    }
+
+    public void setColor() {
+        multiChoiceAdapter.currentQuestionPosition = this.currentQuestionPosition;
+        multiChoiceAdapter.notifyDataSetChanged();
+
+    }
+
+    public void previousBtnVisibility() {
+        if (currentQuestionPosition == 0) {
+            binding.previousBtn.setVisibility(View.INVISIBLE);
+        } else {
+            binding.previousBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void nextBtnVisibility() {
+        if (currentQuestionPosition == questions.size()-1) {
+            binding.nextBtn.setVisibility(View.INVISIBLE);
             binding.submitBtn.setVisibility(View.VISIBLE);
         } else {
             binding.nextBtn.setVisibility(View.VISIBLE);
-            binding.submitBtn.setVisibility(View.GONE);
+            binding.submitBtn.setVisibility(View.INVISIBLE);
         }
     }
 
     private void setNextBtn() {
         binding.nextBtn.setOnClickListener(v -> {
             try {
-                currentQuestionNum = multiChoiceAdapter.currentQuestionPosition;
-                currentQuestionNum++;
-                Question question = questions.get(currentQuestionNum);
-                showQuestion(question);
+                currentQuestionPosition++;
+                Question question = questions.get(currentQuestionPosition);
+                showData(question);
             } catch (Exception exception) {
                 showToast("Questions over");
             }
-            multiChoiceAdapter.currentQuestionPosition = currentQuestionNum;
-            multiChoiceAdapter.notifyDataSetChanged();
-            nextBtnHide();
         });
     }
 
     private void setPreviousBtn() {
         binding.previousBtn.setOnClickListener(v -> {
             try {
-                currentQuestionNum = multiChoiceAdapter.currentQuestionPosition;
-                currentQuestionNum--;
-                Question question = questions.get(currentQuestionNum);
-                showQuestion(question);
+                currentQuestionPosition--;
+                Question question = questions.get(currentQuestionPosition);
+                showData(question);
             } catch (ArrayIndexOutOfBoundsException exception) {
                 showToast("This is the first question");
             }
-            multiChoiceAdapter.currentQuestionPosition = currentQuestionNum;
-            multiChoiceAdapter.notifyDataSetChanged();
         });
     }
 
@@ -126,7 +140,7 @@ public class MultipleChoiceActivity extends BaseActivity {
             public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
                 questions = response.body();
                 multiChoiceAdapter.setData(questions);
-                showQuestion(questions.get(0));
+                showData(questions.get(0));
             }
 
             @Override
@@ -143,7 +157,7 @@ public class MultipleChoiceActivity extends BaseActivity {
         multiChoiceAdapter.setOnItemActionListener(new OnItemActionListener() {
             @Override
             public void onNumberClick(Question question) {
-               showQuestion(question);
+               showData(question);
             }
         });
     }
