@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RadioGroup;
 
 import com.example.interviewquestion.baseapi.BaseActivity;
 import com.example.interviewquestion.databinding.ActivityMultipleChoiceBinding;
@@ -23,6 +24,8 @@ public class MultipleChoiceActivity extends BaseActivity {
     public MultiChoiceAdapter multiChoiceAdapter;
     private int currentQuestionPosition = 0;
 
+    private Integer []  answerOptionsIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,29 @@ public class MultipleChoiceActivity extends BaseActivity {
         setupMultipleChoiceRv();
         setNextBtn();
         setPreviousBtn();
+        handleRadioGroup();
 
+    }
+
+    private void handleRadioGroup() {
+        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (binding.answerARb.isChecked()) {
+                    answerOptionsIndex[currentQuestionPosition] = 0;
+                } else if (binding.answerBRb.isChecked()) {
+                    answerOptionsIndex[currentQuestionPosition] = 1;
+                } else if (binding.answerCRb.isChecked()) {
+                    answerOptionsIndex[currentQuestionPosition] = 2;
+                } else if (binding.answerDRbtn.isChecked()) {
+                    answerOptionsIndex[currentQuestionPosition] = 3;
+                } else if (binding.answerERb.isChecked()) {
+                    answerOptionsIndex[currentQuestionPosition] = 4;
+                } else if (binding.answerFfRb.isChecked()) {
+                    answerOptionsIndex[currentQuestionPosition] = 5;
+                }
+            }
+        });
     }
 
     public void showData(Question question) {
@@ -42,13 +67,11 @@ public class MultipleChoiceActivity extends BaseActivity {
         setColor();
         previousBtnVisibility();
         nextBtnVisibility();
-
     }
 
     public void setColor() {
         multiChoiceAdapter.currentQuestionPosition = this.currentQuestionPosition;
         multiChoiceAdapter.notifyDataSetChanged();
-
     }
 
     public void previousBtnVisibility() {
@@ -73,6 +96,7 @@ public class MultipleChoiceActivity extends BaseActivity {
         binding.nextBtn.setOnClickListener(v -> {
             try {
                 currentQuestionPosition++;
+                multiChoiceAdapter.currentQuestionPosition = currentQuestionPosition;
                 Question question = questions.get(currentQuestionPosition);
                 showData(question);
             } catch (Exception exception) {
@@ -83,18 +107,21 @@ public class MultipleChoiceActivity extends BaseActivity {
 
     private void setPreviousBtn() {
         binding.previousBtn.setOnClickListener(v -> {
-            try {
-                currentQuestionPosition--;
-                Question question = questions.get(currentQuestionPosition);
-                showData(question);
-            } catch (ArrayIndexOutOfBoundsException exception) {
-                showToast("This is the first question");
-            }
+        try {
+            currentQuestionPosition--;
+            multiChoiceAdapter.currentQuestionPosition = currentQuestionPosition;
+            Question question = questions.get(currentQuestionPosition);
+            showData(question);
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            showToast("This is the first question");
+        }
         });
     }
 
     public void showQuestion(Question question) {
+        currentQuestionPosition = multiChoiceAdapter.currentQuestionPosition;
         binding.questionTxt.setText(question.getQuestion());
+        binding.radioGroup.clearCheck();
         if (question.getAnswers().getAnswerA() == null) {
             binding.answerARb.setVisibility(View.GONE);
         } else {
@@ -131,6 +158,30 @@ public class MultipleChoiceActivity extends BaseActivity {
             binding.answerFfRb.setVisibility(View.VISIBLE);
             binding.answerFfRb.setText(question.getAnswers().getAnswerF());
         }
+
+       /* if (answerOptionsIndex[currentQuestionPosition] == null) {
+            binding.answerARb.setChecked(false);
+            binding.answerBRb.setChecked(false);
+            binding.answerCRb.setChecked(false);
+            binding.answerDRbtn.setChecked(false);
+            binding.answerERb.setChecked(false);
+            binding.answerFfRb.setChecked(false);
+        } */
+        if (answerOptionsIndex[currentQuestionPosition] != null) {
+            if (answerOptionsIndex[currentQuestionPosition] == 0) {
+                binding.answerARb.setChecked(true);
+            } else if (answerOptionsIndex[currentQuestionPosition] == 1) {
+                binding.answerBRb.setChecked(true);
+            } else if (answerOptionsIndex[currentQuestionPosition] == 2) {
+                binding.answerCRb.setChecked(true);
+            } else if (answerOptionsIndex[currentQuestionPosition] == 3) {
+                binding.answerDRbtn.setChecked(true);
+            } else if (answerOptionsIndex[currentQuestionPosition] == 4) {
+                binding.answerERb.setChecked(true);
+            } else if (answerOptionsIndex[currentQuestionPosition] == 5) {
+                binding.answerFfRb.setChecked(true);
+            }
+        }
     }
 
     public void fetchQuestionAndAnswers() {
@@ -140,6 +191,7 @@ public class MultipleChoiceActivity extends BaseActivity {
             public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
                 questions = response.body();
                 multiChoiceAdapter.setData(questions);
+                answerOptionsIndex = new Integer[questions.size()];
                 showData(questions.get(0));
             }
 

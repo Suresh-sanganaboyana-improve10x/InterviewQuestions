@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/question_txt" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/radio_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

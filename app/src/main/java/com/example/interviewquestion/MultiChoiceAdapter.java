@@ -41,8 +41,8 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceViewHold
         Question question = choices.get(position);
         holder.binding.numberOfQuestionsTxt.setText(String.valueOf(position+1));
         holder.binding.getRoot().setOnClickListener(v -> {
-//            currentQuestionPosition = position;
-//            notifyDataSetChanged();
+            currentQuestionPosition = position;
+            notifyDataSetChanged();
             onItemActionListener.onNumberClick(question);
         });
         if (currentQuestionPosition == position) {

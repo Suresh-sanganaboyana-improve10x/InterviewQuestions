@@ -14,6 +14,6 @@ public interface MultiChoiceService {
     @GET(Constants.END_POINT)
     Call<List<Question>> getQuestionAndAnswers();
 
-    @GET("questions")
-    Call<Question> getQuestions(@Query("question") int questionId);
+  /*  @GET("questions")
+    Call<Question> getQuestions(@Query("question") int questionId);*/
 }
