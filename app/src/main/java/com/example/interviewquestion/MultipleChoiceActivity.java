@@ -159,14 +159,6 @@ public class MultipleChoiceActivity extends BaseActivity {
             binding.answerFfRb.setText(question.getAnswers().getAnswerF());
         }
 
-       /* if (answerOptionsIndex[currentQuestionPosition] == null) {
-            binding.answerARb.setChecked(false);
-            binding.answerBRb.setChecked(false);
-            binding.answerCRb.setChecked(false);
-            binding.answerDRbtn.setChecked(false);
-            binding.answerERb.setChecked(false);
-            binding.answerFfRb.setChecked(false);
-        } */
         if (answerOptionsIndex[currentQuestionPosition] != null) {
             if (answerOptionsIndex[currentQuestionPosition] == 0) {
                 binding.answerARb.setChecked(true);
